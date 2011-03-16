@@ -3,7 +3,7 @@
 # AUTOR: Xisco Seguí Belman
 # AUTOR: Vicenç Juan Tomàs Montserrat
 # LLICENCIA: GPL-3
-# VERSIO: 0.2
+# VERSIO: 0.1
 
 ##### VARIABLES #####
 
@@ -24,16 +24,34 @@ fi
 function punt1 {
     echo "Punt 1"
     echo
+    awk '{
+            total[$7]=$10
+        } END {
+            for (v in total)
+                print "El trafic total del fitxer "v" es: "total[v]
+        }' $FITXER
 }
 
 function punt2 {
     echo "Punt 2"
     echo
+    awk '{
+            total[$7]+=$10
+        } END {
+            for (v in total)
+                print "El trafic total del fitxer "v" es: "total[v]
+        }' $FITXER
 }
 
 function punt3 {
     echo "Punt 3"
     echo
+    awk '{
+            total[$1]+=$10
+        } END {
+            for (v in total)
+                print "El trafic total de la IP "v" es: "total[v]
+        }' $FITXER
 }
 
 function punt4 {
@@ -54,7 +72,7 @@ function punt6 {
 function punt7 {
     echo "Punt 7"
     echo
-    echo "Nombre de 404: `cat $FITXER | awk '{print $9}' | grep 404 | wc -l`"
+    echo "Nombre de 404: `cat $FITXER | awk '{print $9}' | grep 404 | wc -l`" # lent
 }
 
 function menu() {
