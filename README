@@ -1,0 +1,31 @@
+Análisis de ficheros de logs
+
+Desarrollar un script en bash/shell que analice un fichero de logs de Apache y genere los siguientes resultados:
+
+1. Tamaño de cada fichero.
+
+2. Tráfico total por cada fichero.
+
+3. Tráfico total por cada dirección IP analizada.
+
+4. El día con más tráfico (contando los bytes servidos).
+
+5. La hora con más tráfico (contando los bytes servidos).
+
+6. El día con mas visitantes (por IP diferentes).
+
+7. Ficheros solicitados no existentes (código 404).
+
+Fichero logs de ejemplo: http://mnm.uib.es/gallir/tmp/access.log.gz
+
+Columna   Valor
+1    IP de acceso al servidor host
+2-3  Información de seguridad de https / SSL conexiones
+4    Fecha y zona horaria de la petición específica
+5    Método invocado
+6    URL solicitada
+7    Protocolo utilizado
+8    Resultados de código
+9    Número de bytes transferidos
+10   Referrer
+11   cadena de identificación del Navegador
