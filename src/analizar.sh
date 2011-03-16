@@ -1,8 +1,9 @@
 #!/bin/bash
 
+# AUTOR: Xisco Seguí Belman
 # AUTOR: Vicenç Juan Tomàs Montserrat
 # LLICENCIA: GPL-3
-# VERSIO: 0.1
+# VERSIO: 0.2
 
 ##### VARIABLES #####
 
@@ -23,31 +24,6 @@ fi
 function punt1 {
     echo "Punt 1"
     echo
-#   i=0
-    while read line # llegim linia a linia
-    do
-#       i=$(($i+1));
-#       echo "i=$i Line=$line"
-        echo "Linia = $line"
-        file=`awk '{print $7}' $line` # ERROR: guarda totes les linies del fitxer, no una a una!
-        echo "Fitxer = $file"
-        if [ ! -f $file ]; then
-            echo "$file, NO es un fitxer!"
-        else
-        fi
-    done < $FITXER
-
-## Llegir paraula a paraula
-#   for linia in `cat $FITXER`
-#   do
-#       echo $linia
-#       if [ ! -f $linia ]; then
-#           echo "$linia, NO es un fitxer!"
-#       else
-#           du -h $linia
-#       fi
-#   done
-
 }
 
 function punt2 {
