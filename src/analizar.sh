@@ -1,14 +1,8 @@
 #!/bin/bash
 
-# AUTOR: Xisco Seguí Belman
 # AUTOR: Vicenç Juan Tomàs Montserrat
 # LLICENCIA: GPL-3
 # VERSIO: 0.1
-
-##### VARIABLES #####
-
-# fitxer passat per paràmetre
-FITXER=$1
 
 ##### COMPROVACIONS #####
 
@@ -19,65 +13,52 @@ if [ $# -eq 0 -o ! -f "$1" ]; then
     exit 1
 fi
 
+##### VARIABLES #####
+
+# fitxer passat per paràmetre
+FITXER=$1
+
 ##### FUNCIONS #####
 
 function punt1 {
-    echo "Punt 1"
     echo
-    awk '{
-            total[$7]=$10
-        } END {
-            for (v in total)
-                print "El trafic total del fitxer "v" es: "total[v]
-        }' $FITXER
+    awk '{ total[$7]=$10 } END { for (v in total) print "El tamany total del fitxer " v " és: " total[v], "bytes" }' $FITXER
 }
 
 function punt2 {
-    echo "Punt 2"
     echo
-    awk '{
-            total[$7]+=$10
-        } END {
-            for (v in total)
-                print "El trafic total del fitxer "v" es: "total[v]
-        }' $FITXER
+    awk '{ total[$7]+=$10 } END { for (v in total) print "El tràfic total del fitxer " v " és: " total[v], "bytes" }' $FITXER
 }
 
 function punt3 {
-    echo "Punt 3"
     echo
-    awk '{
-            total[$1]+=$10
-        } END {
-            for (v in total)
-                print "El trafic total de la IP "v" es: "total[v]
-        }' $FITXER
+    awk '{ total[$1]+=$10 } END { for (v in total) print "El tràfic total de la IP " v " és: " total[v], "bytes" }' $FITXER
 }
 
 function punt4 {
-    echo "Punt 4"
     echo
+    awk '{ total[$4]+=$10 } END { for (v in total) print  v":"total[v] }' $FITXER | awk -F: '{ total[$1]+=$5 } END { for (v in total) print v,total[v] }' | awk 'BEGIN {max=0 } { if($2>max) {dia=$1; max=$2};} END { print "El dia amb més trafic és: "dia" ->",max" bytes " }'
 }
 
 function punt5 {
-    echo "Punt 5"
     echo
+    awk '{print $4,$10}' $FITXER | awk -F: '{print $2,$4}' | awk '{print $1,$3}' | awk '{ total[$1]+=$2 } END { for (v in total) print v,total[v] }' | awk 'BEGIN {max=0 } { if($2>max) {hora=$1; max=$2};} END { print "La hora amb més trafic és: "hora"h ->", max" bytes " }'
 }
 
 function punt6 {
-    echo "Punt 6"
     echo
+    awk -F: '{ total[$1]+=$4 } END { for (v in total) print v }' | awk '{ ip[$1]++; } END { for (var in ip) print var,ip[var] }' | awk 'BEGIN { max=0 } { if($3>max) {ip=$1; accesos=$3}; } END { print "El dia amb més visitants (per IP única) és: "ip "->",accesos " accesos" }' $FITXER
 }
 
 function punt7 {
-    echo "Punt 7"
     echo
-    echo "Nombre de 404: `cat $FITXER | awk '{print $9}' | grep 404 | wc -l`" # lent
+    awk '{print $9}' $FITXER | awk 'BEGIN {count=0} { if($1==404) {count+=1} } END { print "Nombre de 404: "count }'
+    #echo "Nombre de 404: `cat $FITXER | awk '{print $9}' | grep 404 | wc -l`" # alternativa
 }
 
 function menu() {
     echo
-    echo "Menú d'administració"
+    echo "Menú interactiu"
     echo
     echo "1) Tamany de cada fitxer"
     echo "2) Tràfic total per cada fitxer"
@@ -91,7 +72,7 @@ function menu() {
 
 ##### INICI DEL PROGRAMA  #####
 
-while (true)
+while true
 do
     menu;
     echo
@@ -105,7 +86,7 @@ do
         5) punt5;;
         6) punt6;;
         7) punt7;;
-        q|Q) exit;;
+        q|Q) exit 0;;
         *) clear; echo "Opció no vàlida!"
     esac
 done
