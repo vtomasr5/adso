@@ -42,17 +42,60 @@ function punt2 {
 
 function punt3 {
     echo
-    awk '{ total[$1]+=$10 } END { for (v in total) print "El tràfic total de la IP " v " és: " total[v], "bytes" }' $FITXER
+    awk '{
+            total[$1]+=$10
+         } END {
+            for (v in total)
+                print "El tràfic total de la IP " v " és: " total[v], "bytes"
+         }' $FITXER
 }
 
 function punt4 {
     echo
-    awk '{ total[$4]+=$10 } END { for (v in total) print  v":"total[v] }' $FITXER | awk -F: '{ total[$1]+=$5 } END { for (v in total) print v,total[v] }' | awk 'BEGIN {max=0 } { if($2>max) {dia=$1; max=$2};} END { print "El dia amb més trafic és: " dia " ->",max" bytes " }'
+    awk '{
+            total[$4]+=$10
+         } END {
+            for (v in total)
+                print  v":"total[v]
+         }' $FITXER | awk -F: '{
+                                    total[$1]+=$5
+                               } END {
+                                    for (v in total)
+                                        print v,total[v]
+                               }' | awk 'BEGIN {
+                                            max=0
+                                         }
+                                         {
+                                            if($2>max) {
+                                                dia=$1; max=$2
+                                            };
+                                         } END {
+                                             print "El dia amb més trafic és: " dia " ->",max" bytes "
+                                         }'
 }
 
 function punt5 {
     echo
-    awk '{print $4,$10}' $FITXER | awk -F: '{print $2,$4}' | awk '{print $1,$3}' | awk '{ total[$1]+=$2 } END { for (v in total) print v,total[v] }' | awk 'BEGIN {max=0 } { if($2>max) {hora=$1; max=$2};} END { print "La hora amb més trafic és: " hora"h ->", max" bytes " }'
+    awk '{
+            print $4,$10
+         }' $FITXER | awk -F: '{
+                                    print $2,$4
+                               }' | awk '{
+                                            print $1,$3
+                                         }' | awk '{
+                                                        total[$1]+=$2
+                                                   } END {
+                                                       for (v in total)
+                                                           print v,total[v]
+                                                   }' | awk 'BEGIN {
+                                                                max=0
+                                                             }
+                                                             { if($2>max) {
+                                                                 hora=$1; max=$2
+                                                               };
+                                                             } END {
+                                                                 print "La hora amb més trafic és: " hora"h ->", max" bytes "
+                                                             }'
 }
 
 function punt6 {
@@ -63,7 +106,18 @@ function punt6 {
 
 function punt7 {
     echo
-    awk '{print $9}' $FITXER | awk 'BEGIN {count=0} { if($1==404) {count+=1} } END { print "Nombre de 404: "count }'
+    awk '{
+            print $9
+         }' $FITXER | awk 'BEGIN {
+                                count=0
+                           }
+                           { if($1==404) {
+                                count+=1
+                             };
+                           } END {
+                               print "Nombre de 404: "count
+                           }'
+
     #echo "Nombre de 404: `cat $FITXER | awk '{print $9}' | grep 404 | wc -l`" # alternativa (no tant bona)
 }
 
